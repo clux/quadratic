@@ -9,3 +9,6 @@ keywords = ["math", "legendre", "symbol", "reciprocity"]
 description = """
 Computes the Legendre and Jacobi symbols for integers
 """
+
+[dependencies]
+primes = "0.2.0"
