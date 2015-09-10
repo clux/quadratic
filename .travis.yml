@@ -1,0 +1,4 @@
+sudo: false
+language: rust
+rust:
+  - 1.2.0

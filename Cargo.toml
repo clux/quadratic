@@ -1,0 +1,11 @@
+[package]
+name = "quadratic"
+version = "0.1.0"
+authors = ["clux <analsandblaster@gmail.com>"]
+homepage = "https://github.com/clux/quadratic"
+repository = "https://github.com/clux/quadratic"
+license = "MIT"
+keywords = ["math", "legendre", "symbol", "reciprocity"]
+description = """
+Computes the Legendre and Jacobi symbols for integers
+"""
