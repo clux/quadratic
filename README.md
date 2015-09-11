@@ -12,3 +12,6 @@ extern crate quadratic;
 assert_eq!(-1, quadratic::jacobi(2, 5));
 assert_eq(1, quadratic::jacobi(2, 15));
 ```
+
+## License
+MIT-Licensed. See LICENSE file for details.
