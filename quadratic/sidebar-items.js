@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["jacobi","Returns the value of the Jacobi symbol for (a \\ n) Where a is an integer and n is an odd positive integer"]]});
