@@ -3,19 +3,13 @@ use num::Integer;
 
 /// Supplementary law
 fn two_over(n: u32) -> (i8) {
-    if n % 8 == 1 || n % 8 == 7 {
-        return 1;
-    }
-    return -1; // otherwise n is 3 or 5 mod 8 since n is odd
+    if n % 8 == 1 || n % 8 == 7 { 1 } else { -1 }
 }
 
 /// Legendre's version of quadratic reciprocity law
 /// Returns the sign change needed to keep track of if flipping
 fn reciprocity(num: u32, den: u32) -> (i8) {
-    if num % 4 == 3 && den % 4 == 3 {
-        return -1;
-    }
-    return 1;
+    if num % 4 == 3 && den % 4 == 3 { -1 } else { 1 }
 }
 
 /// Returns the value of the Jacobi symbol for (a \ n)
