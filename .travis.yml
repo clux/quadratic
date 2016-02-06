@@ -1,0 +1,10 @@
+sudo: false
+language: rust
+rust:
+  - beta
+  - stable
+  - 1.6.0
+notifications:
+  email:
+    on_success: change
+    on_failure: always
