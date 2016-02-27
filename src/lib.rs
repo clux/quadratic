@@ -1,14 +1,16 @@
 extern crate num;
 use num::Integer;
+use num::traits::ToPrimitive;
+
 
 /// Supplementary law
-fn two_over(n: u32) -> (i8) {
+fn two_over(n: usize) -> (i8) {
     if n % 8 == 1 || n % 8 == 7 { 1 } else { -1 }
 }
 
 /// Legendre's version of quadratic reciprocity law
 /// Returns the sign change needed to keep track of if flipping
-fn reciprocity(num: u32, den: u32) -> (i8) {
+fn reciprocity(num: usize, den: usize) -> (i8) {
     if num % 4 == 3 && den % 4 == 3 { -1 } else { 1 }
 }
 
@@ -25,17 +27,14 @@ fn reciprocity(num: u32, den: u32) -> (i8) {
 /// # assert_eq!(-1, symb);
 /// ```
 
-pub fn jacobi(a_: i32, n_: i32) -> (i8) {
-    assert!(n_.is_odd());
-    assert!(n_ > 0);
-    // ensure we start out with u32s
-    let a = a_.mod_floor(&n_) as u32;
-    let n = n_ as u32;
+pub fn jacobi(a: isize, n: isize) -> i8 {
+    assert!(n.is_odd(), "jacobi symbol is not defined for even moduli");
+    assert!(n > 0, "jacobi symbol is not negative moduli");
 
-    // start algorithm:
+    // Raise a mod n, then start the unsigned algorithm
     let mut acc = 1;
-    let mut num = a;
-    let mut den = n;
+    let mut num = a.mod_floor(&n).to_usize().unwrap();
+    let mut den = n as usize;
     loop {
         // reduce numerator
         num = num % den;
@@ -100,12 +99,23 @@ mod tests {
         assert_eq!(jacobi(10,7), jacobi(3,7));
     }
 
-    // jacobi tests
     #[test]
-    fn a_over_n() { // 45 = 3*3*5
+    fn jacobi_simple() { // 45 = 3*3*5
         assert_eq!(-1, jacobi(2, 45)); // -1 * -1 * -1
         assert_eq!(0, jacobi(3, 45)); // 0 * 0 * -1
         assert_eq!(-1, jacobi(7, 45)); // -1 * -1 * -1
         assert_eq!(1, jacobi(2, 15)); // (2\5) * (2\3)
+        assert_eq!(-1, jacobi(1001, 9907)); // wikepedia example
+    }
+
+    #[test]
+    #[should_panic]
+    fn even_moduli_asserts() {
+        jacobi(2, 4);
+    }
+    #[test]
+    #[should_panic]
+    fn negative_moduli_asserts() {
+        jacobi(2, -3);
     }
 }
