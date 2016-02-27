@@ -11,4 +11,4 @@ Computes the Legendre and Jacobi symbols for integers
 """
 
 [dependencies]
-num = "0.1.27"
+num = "0.1.31"
