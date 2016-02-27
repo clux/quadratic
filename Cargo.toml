@@ -1,6 +1,6 @@
 [package]
 name = "quadratic"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["clux <analsandblaster@gmail.com>"]
 homepage = "https://github.com/clux/quadratic"
 repository = "https://github.com/clux/quadratic"
