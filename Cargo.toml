@@ -1,9 +1,9 @@
 [package]
 name = "quadratic"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["clux <analsandblaster@gmail.com>"]
-homepage = "https://github.com/clux/quadratic"
 repository = "https://github.com/clux/quadratic"
+documentation = "http://clux.github.io/quadratic"
 license = "MIT"
 keywords = ["math", "legendre", "symbol", "reciprocity"]
 description = """
