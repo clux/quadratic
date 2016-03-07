@@ -9,6 +9,7 @@
 
     <title>lib.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -24,17 +25,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -157,56 +158,81 @@
 <span id="115">115</span>
 <span id="116">116</span>
 <span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
 </pre><pre class='rust '>
+<span class='doccomment'>//! Helper functions related to [quadratic reciprocity](https://en.wikipedia.org/wiki/Quadratic_reciprocity).</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! This library calculates the [Legendre](http://mathworld.wolfram.com/LegendreSymbol.html)</span>
+<span class='doccomment'>//! and [Jacobi symbol](http://mathworld.wolfram.com/JacobiSymbol.html) using the</span>
+<span class='doccomment'>//! [standard algorithm](https://en.wikipedia.org/wiki/Jacobi_symbol#Calculating_the_Jacobi_symbol).</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! Since the Jacobi symbol is a generalization of the Legendre symbol,</span>
+<span class='doccomment'>//! only a `jacobi` function is provided.</span>
+<span class='doccomment'>//!</span>
+
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>num</span>;
 <span class='kw'>use</span> <span class='ident'>num</span>::<span class='ident'>Integer</span>;
+<span class='kw'>use</span> <span class='ident'>num</span>::<span class='ident'>traits</span>::<span class='ident'>ToPrimitive</span>;
+
 
 <span class='doccomment'>/// Supplementary law</span>
-<span class='kw'>fn</span> <span class='ident'>two_over</span>(<span class='ident'>n</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> (<span class='ident'>i8</span>) {
-    <span class='kw'>if</span> <span class='ident'>n</span> <span class='op'>%</span> <span class='number'>8</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>n</span> <span class='op'>%</span> <span class='number'>8</span> <span class='op'>==</span> <span class='number'>7</span> {
-        <span class='kw'>return</span> <span class='number'>1</span>;
-    }
-    <span class='kw'>return</span> <span class='op'>-</span><span class='number'>1</span>; <span class='comment'>// otherwise n is 3 or 5 mod 8 since n is odd</span>
+<span class='kw'>fn</span> <span class='ident'>two_over</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> (<span class='ident'>i8</span>) {
+    <span class='kw'>if</span> <span class='ident'>n</span> <span class='op'>%</span> <span class='number'>8</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>n</span> <span class='op'>%</span> <span class='number'>8</span> <span class='op'>==</span> <span class='number'>7</span> { <span class='number'>1</span> } <span class='kw'>else</span> { <span class='op'>-</span><span class='number'>1</span> }
 }
 
 <span class='doccomment'>/// Legendre&#39;s version of quadratic reciprocity law</span>
 <span class='doccomment'>/// Returns the sign change needed to keep track of if flipping</span>
-<span class='kw'>fn</span> <span class='ident'>reciprocity</span>(<span class='ident'>num</span>: <span class='ident'>u32</span>, <span class='ident'>den</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> (<span class='ident'>i8</span>) {
-    <span class='kw'>if</span> <span class='ident'>num</span> <span class='op'>%</span> <span class='number'>4</span> <span class='op'>==</span> <span class='number'>3</span> <span class='op'>&amp;&amp;</span> <span class='ident'>den</span> <span class='op'>%</span> <span class='number'>4</span> <span class='op'>==</span> <span class='number'>3</span> {
-        <span class='kw'>return</span> <span class='op'>-</span><span class='number'>1</span>;
-    }
-    <span class='kw'>return</span> <span class='number'>1</span>;
+<span class='kw'>fn</span> <span class='ident'>reciprocity</span>(<span class='ident'>num</span>: <span class='ident'>usize</span>, <span class='ident'>den</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> (<span class='ident'>i8</span>) {
+    <span class='kw'>if</span> <span class='ident'>num</span> <span class='op'>%</span> <span class='number'>4</span> <span class='op'>==</span> <span class='number'>3</span> <span class='op'>&amp;&amp;</span> <span class='ident'>den</span> <span class='op'>%</span> <span class='number'>4</span> <span class='op'>==</span> <span class='number'>3</span> { <span class='op'>-</span><span class='number'>1</span> } <span class='kw'>else</span> { <span class='number'>1</span> }
 }
 
-<span class='doccomment'>/// Returns the value of the Jacobi symbol for (a \ n)</span>
-<span class='doccomment'>/// Where a is an integer and n is an odd positive integer</span>
+<span class='doccomment'>/// Returns the value of the Jacobi symbol for `(a \ n)`</span>
+<span class='doccomment'>/// Where `a` is an integer and `n` is an odd positive integer</span>
 <span class='doccomment'>///</span>
+<span class='doccomment'>/// If the intergers passed in do not match these assumptions,</span>
+<span class='doccomment'>/// the return value will be `None`. Otherwise the algorithm can be assumed to</span>
+<span class='doccomment'>/// always succeed.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>/// # Example</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// ```rust</span>
 <span class='doccomment'>/// # extern crate quadratic;</span>
 <span class='doccomment'>/// // compute the Jacobi symbol of (2 \ 5)</span>
 <span class='doccomment'>/// let symb = quadratic::jacobi(2, 5);</span>
-<span class='doccomment'>/// # assert_eq!(-1, symb);</span>
+<span class='doccomment'>/// assert_eq!(Some(-1), symb);</span>
 <span class='doccomment'>/// ```</span>
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>jacobi</span>(<span class='ident'>a_</span>: <span class='ident'>i32</span>, <span class='ident'>n_</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> (<span class='ident'>i8</span>) {
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>n_</span>.<span class='ident'>is_odd</span>());
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>n_</span> <span class='op'>&gt;</span> <span class='number'>0</span>);
-    <span class='comment'>// ensure we start out with u32s</span>
-    <span class='kw'>let</span> <span class='ident'>a</span> <span class='op'>=</span> <span class='ident'>a_</span>.<span class='ident'>mod_floor</span>(<span class='kw-2'>&amp;</span><span class='ident'>n_</span>) <span class='kw'>as</span> <span class='ident'>u32</span>;
-    <span class='kw'>let</span> <span class='ident'>n</span> <span class='op'>=</span> <span class='ident'>n_</span> <span class='kw'>as</span> <span class='ident'>u32</span>;
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>jacobi</span>(<span class='ident'>a</span>: <span class='ident'>isize</span>, <span class='ident'>n</span>: <span class='ident'>isize</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>i8</span><span class='op'>&gt;</span> {
+    <span class='comment'>// jacobi symbol is only defined for odd positive moduli</span>
+    <span class='kw'>if</span> <span class='ident'>n</span>.<span class='ident'>is_even</span>() <span class='op'>||</span> <span class='ident'>n</span> <span class='op'>&lt;=</span> <span class='number'>0</span> {
+        <span class='kw'>return</span> <span class='prelude-val'>None</span>;
+    }
 
-    <span class='comment'>// start algorithm:</span>
+    <span class='comment'>// Raise a mod n, then start the unsigned algorithm</span>
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>acc</span> <span class='op'>=</span> <span class='number'>1</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>num</span> <span class='op'>=</span> <span class='ident'>a</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>den</span> <span class='op'>=</span> <span class='ident'>n</span>;
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>num</span> <span class='op'>=</span> <span class='ident'>a</span>.<span class='ident'>mod_floor</span>(<span class='kw-2'>&amp;</span><span class='ident'>n</span>).<span class='ident'>to_usize</span>().<span class='ident'>unwrap</span>();
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>den</span> <span class='op'>=</span> <span class='ident'>n</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
     <span class='kw'>loop</span> {
         <span class='comment'>// reduce numerator</span>
         <span class='ident'>num</span> <span class='op'>=</span> <span class='ident'>num</span> <span class='op'>%</span> <span class='ident'>den</span>;
         <span class='kw'>if</span> <span class='ident'>num</span> <span class='op'>==</span> <span class='number'>0</span> {
-            <span class='kw'>return</span> <span class='number'>0</span>;
+            <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='number'>0</span>);
         }
 
         <span class='comment'>// extract factors of two from numerator</span>
@@ -216,11 +242,11 @@
         }
         <span class='comment'>// if numerator is 1 =&gt; this sub-symbol is 1</span>
         <span class='kw'>if</span> <span class='ident'>num</span> <span class='op'>==</span> <span class='number'>1</span> {
-            <span class='kw'>return</span> <span class='ident'>acc</span>;
+            <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='ident'>acc</span>);
         }
         <span class='comment'>// shared factors =&gt; one sub-symbol is zero</span>
         <span class='kw'>if</span> <span class='ident'>num</span>.<span class='ident'>gcd</span>(<span class='kw-2'>&amp;</span><span class='ident'>den</span>) <span class='op'>&gt;</span> <span class='number'>1</span> {
-            <span class='kw'>return</span> <span class='number'>0</span>;
+            <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='number'>0</span>);
         }
         <span class='comment'>// num and den are now odd co-prime, use reciprocity law:</span>
         <span class='ident'>acc</span> <span class='op'>*=</span> <span class='ident'>reciprocity</span>(<span class='ident'>num</span>, <span class='ident'>den</span>);
@@ -238,24 +264,24 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>minus_one_over_p</span>() {
         <span class='comment'>// 1 mod 4 =&gt; 1</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>5</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>13</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>5</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>13</span>));
         <span class='comment'>// 3 mod 4 =&gt; -1</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>3</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>7</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>3</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='number'>7</span>));
     }
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>two_over_p</span>() {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>3</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>5</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>7</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>17</span>)); <span class='comment'>// 17 = 1 mod 8</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>3</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>5</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>7</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>17</span>)); <span class='comment'>// 17 = 1 mod 8</span>
     }
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>three_over_p</span>() {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>3</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>5</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>7</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>0</span>), <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>3</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>5</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>7</span>));
     }
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>periodicity</span>() {
@@ -266,13 +292,22 @@
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>jacobi</span>(<span class='number'>10</span>,<span class='number'>7</span>), <span class='ident'>jacobi</span>(<span class='number'>3</span>,<span class='number'>7</span>));
     }
 
-    <span class='comment'>// jacobi tests</span>
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>a_over_n</span>() { <span class='comment'>// 45 = 3*3*5</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>45</span>)); <span class='comment'>// -1 * -1 * -1</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0</span>, <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>45</span>)); <span class='comment'>// 0 * 0 * -1</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>-</span><span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>7</span>, <span class='number'>45</span>)); <span class='comment'>// -1 * -1 * -1</span>
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>15</span>)); <span class='comment'>// (2\5) * (2\3)</span>
+    <span class='kw'>fn</span> <span class='ident'>jacobi_simple</span>() { <span class='comment'>// 45 = 3*3*5</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>45</span>)); <span class='comment'>// -1 * -1 * -1</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>0</span>), <span class='ident'>jacobi</span>(<span class='number'>3</span>, <span class='number'>45</span>)); <span class='comment'>// 0 * 0 * -1</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>7</span>, <span class='number'>45</span>)); <span class='comment'>// -1 * -1 * -1</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>15</span>)); <span class='comment'>// (2\5) * (2\3)</span>
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='op'>-</span><span class='number'>1</span>), <span class='ident'>jacobi</span>(<span class='number'>1001</span>, <span class='number'>9907</span>)); <span class='comment'>// wikepedia example</span>
+    }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>even_moduli_fails</span>() {
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>None</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='number'>4</span>));
+    }
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>negative_moduli_fails</span>() {
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>None</span>, <span class='ident'>jacobi</span>(<span class='number'>2</span>, <span class='op'>-</span><span class='number'>3</span>));
     }
 }
 </pre>
@@ -281,40 +316,49 @@
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -326,6 +370,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>
