@@ -30,6 +30,7 @@ fn reciprocity(num: usize, den: usize) -> (i8) {
 pub fn jacobi(a: isize, n: isize) -> i8 {
     assert!(n.is_odd(), "jacobi symbol is not defined for even moduli");
     assert!(n > 0, "jacobi symbol is not negative moduli");
+    // TODO: assert a < isize max so we don't coerce
 
     // Raise a mod n, then start the unsigned algorithm
     let mut acc = 1;
