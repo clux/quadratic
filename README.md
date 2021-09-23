@@ -1,5 +1,5 @@
 # Quadratic
-[![build status](https://secure.travis-ci.org/clux/quadratic.svg)](http://travis-ci.org/clux/quadratic)
+[![CI](https://github.com/clux/quadratic/actions/workflows/ci.yml/badge.svg)](https://github.com/clux/quadratic/actions/workflows/ci.yml)
 [![coverage status](http://img.shields.io/coveralls/clux/quadratic.svg)](https://coveralls.io/r/clux/quadratic)
 [![crates status](https://img.shields.io/crates/v/quadratic.svg)](https://crates.io/crates/quadratic)
 
